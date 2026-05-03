@@ -17,14 +17,50 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background: #2980b9; }
+        #status-output {
+            margin-top: 15px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            font-family: monospace;
+            min-height: 20px;
         }
     </style>
 </head>
 <body>
     <h1>Hello, World!</h1>
+
     <div class="card">
-        <p>This is your dashboard, served as real HTML from FastAPI.</p>
-        <p>Status: <strong>It works.</strong></p>
+        <p>This page calls the backend's <code>/api/health</code> endpoint.</p>
+        <button onclick="checkHealth()">Check API Health</button>
+        <div id="status-output">Click the button to call the API.</div>
     </div>
+
+    <script>
+        async function checkHealth() {
+            const output = document.getElementById('status-output');
+            output.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                output.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
 </body>
 </html>
